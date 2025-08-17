@@ -1,0 +1,35 @@
+.container { max-width: 360px; margin: 48px auto; padding: 16px; }
+
+.form { display: grid;
+        grid-template-columns: 140px mixmax(0, 1fr);
+        gap: 8px 16px;
+        align-items: start; }
+
+.label { display: block; margin: 12px 0 4px; }
+
+/* ラベルは1列目、入力は2列目に固定 */
+.form label{grid-column: 1;}
+.form input { grid-column: 2; }
+
+.input { width: 100%; padding: 8px; }
+
+/* エラーメッセージは必ず2列目（入力の下）に出す */
+.error{ grid-column: 2;
+        justify-self: stretch;
+        width: 100%;
+        color: #d00;
+        font-size: .9rem;
+        margin-top: 4px;
+        min-height:1.2em;}
+
+.button { margin-top: 16px; padding: 8px 12px; }
+
+.error { color: #d00; font-size: .9rem; margin-top: 4px; }
+
+.register{margin-top:16px}
+
+.image {width: 96;
+        height: 96;
+        border-radius: "50%";
+        object-fit: "cover";
+         margin-top: 8; }
