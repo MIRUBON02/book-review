@@ -1,3 +1,5 @@
+// Signup.jsx
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,7 +42,7 @@ const compressImage = (file) => {
 
 // ログインして JWT を取得
 async function loginAndGetToken(email, password) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
+  const res = await fetch(`${API_BASE}/signin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),

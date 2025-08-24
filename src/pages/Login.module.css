@@ -1,11 +1,12 @@
-.container { max-width: 360px; margin: 48px auto; padding: 16px; }
+.container { max-width: 400px; margin: 48px auto; padding: 16px; }
 
 .form { display: grid;
         grid-template-columns: 140px mixmax(0, 1fr);
         gap: 8px 16px;
-        align-items: start; }
+        align-items: start;
+ }
 
-.label { display: block; margin: 12px 0 4px; }
+.label { display: block; margin: 12px 0 4px;}
 
 /* ラベルは1列目、入力は2列目に固定 */
 .form label{grid-column: 1;}

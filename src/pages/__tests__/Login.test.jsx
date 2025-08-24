@@ -1,17 +1,40 @@
 // src/pages/__tests__/Login.test.jsx
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Login from "../Login";
+import { MemoryRouter } from "react-router-dom";
+
+//テスト用に Router コンテキストでラップする（/login を初期表示にする）
+function renderWithRouter(ui) {
+  return render(<MemoryRouter initialEntries={["/login"]}>{ui}</MemoryRouter>);
+}
+
+const mockFetchOk = () => {
+  // 成功レスポンスを返す fetch を用意（token を返すことが大事）
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ token: "test-token" }),
+    })
+  );
+};
 
 describe("Login page", () => {
   beforeEach(() => {
     // window.alert をモック化（本物のポップアップを出さずに呼び出し回数や引数を記録できるようにする）
     vi.spyOn(window, "alert").mockImplementation(() => {});
+    globalThis.fetch = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("見出し・メール・パスワード・ログインボタンが表示される", () => {
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     // 見出し（h1など）で "ログイン" という名前を持つ要素が存在することを確認
     expect(
@@ -33,7 +56,7 @@ describe("Login page", () => {
   it("未入力で送信するとエラー、正しく入力すると成功alert", async () => {
     // ユーザー操作を再現するためのインスタンスを作成
     const user = userEvent.setup();
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     // 未入力のまま "ログイン" ボタンをクリック
     await user.click(screen.getByRole("button", { name: /ログイン/i }));
@@ -52,10 +75,13 @@ describe("Login page", () => {
     await user.clear(screen.getByLabelText(/パスワード/i));
     await user.type(screen.getByLabelText(/パスワード/i), "password123");
 
+    // ここで fetch を成功モックに差し替える
+    mockFetchOk();
+
     // 再び "ログイン" ボタンをクリック
     await user.click(screen.getByRole("button", { name: /ログイン/i }));
 
     // window.alert が指定したメッセージで呼ばれたことを確認
-    expect(window.alert).toHaveBeenCalledWith("OK: フォームは有効です");
+    expect(window.alert).toHaveBeenCalledWith("ログインできました");
   });
 });
