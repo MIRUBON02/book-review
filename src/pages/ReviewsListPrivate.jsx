@@ -13,6 +13,7 @@ import {
 
 import Paginator from "../components/Paginator";
 import ReviewCard from "./ReviewCard";
+import { pickServerMessage } from "../lib/util";
 /**
  * 書籍レビュー一覧
  * API からレビューを取得し、先頭10件を表示します。
@@ -51,24 +52,17 @@ export default function ReviewsListPrivate() {
           },
         });
 
-        if (res.status === 401 || res.status === 403) {
-          // トークン無効など
-          localStorage.removeItem("token");
-          navigate("/login", { replace: true });
-          return;
-        }
-
         if (!res.ok) {
-          let msg = `HTTP${(res, status)}${res.statusText}`;
-          try {
-            const e = await res.json();
-            if (e?.ErrorMessageJP) msg = e.ErrorMessageJP;
-          } catch {
-            //何もしない
+          if (res.status === 401 || res.status === 403) {
+            // 認証切れ：トークン破棄してログインへ
+            localStorage.removeItem("token");
+            localStorage.removeItem("userName");
+            navigate("/login", { replace: true });
+            return;
           }
-          throw new Error(msg);
+          // それ以外はサーバーのメッセージを優先
+          throw new Error(await pickServerMessage(res));
         }
-
         const data = await res.json();
         const list = Array.isArray(data) ? data : data.books ?? [];
         setItems(list);

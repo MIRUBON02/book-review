@@ -10,6 +10,7 @@ import { nextPublic, prevPublic } from "../features/pagination/paginationSlice";
 
 import Paginator from "../components/Paginator";
 import ReviewCard from "./ReviewCard";
+import { pickServerMessage } from "../lib/util";
 /**
  * 書籍レビュー一覧
  * API からレビューを取得し、先頭10件を表示します。
@@ -42,14 +43,7 @@ export default function ReviewsListPublic() {
 
         if (!res.ok) {
           // エラーボディに日本語メッセージがあれば拾う
-          let msg = `HTTP ${res.status} ${res.statusText}`;
-          try {
-            const errBody = await res.json();
-            if (errBody?.ErrorMessageJP) msg = errBody.ErrorMessageJP;
-          } catch {
-            // 何もしない
-          }
-          throw new Error(msg);
+          throw new Error(await pickServerMessage(res));
         }
 
         const data = await res.json(); // publicBookListGetResponse は配列

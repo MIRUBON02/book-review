@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { API_BASE } from "../config";
 import Compressor from "compressorjs";
 import styles from "./Login.module.css";
+import { pickServerMessage } from "../lib/util";
 
 // 画像以外は Zod で検証（ファイル入力は RHF 側の validate に任せます）
 const schema = z.object({
@@ -40,31 +41,6 @@ const compressImage = (file) => {
   });
 };
 
-// ログインして JWT を取得
-async function loginAndGetToken(email, password) {
-  const res = await fetch(`${API_BASE}/signin`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-  if (!res.ok) {
-    let msg = "ログインに失敗しました";
-    try {
-      const data = await res.json();
-      if (data?.message) msg = data.message;
-    } catch {
-      // 何もしない
-    }
-    throw new Error(msg);
-  }
-  const data = await res.json();
-
-  // 仕様に合わせてキー名を調整（token / accessToken など）
-  const token = data.token || data.accessToken;
-  if (!token) throw new Error("認証トークンの取得に失敗しました");
-  return token;
-}
-
 // JWT を付けて /uploads に FormData(icon) を送信
 async function uploadIconWithJWT(file, token) {
   const fd = new FormData();
@@ -81,14 +57,7 @@ async function uploadIconWithJWT(file, token) {
   });
 
   if (!res.ok) {
-    let msg = "アイコンのアップロードに失敗しました";
-    try {
-      const data = await res.json();
-      if (data?.message) msg = data.message;
-    } catch {
-      // 何もしない
-    }
-    throw new Error(msg);
+    throw new Error(await pickServerMessage(res));
   }
   return res.json(); // レスポンス（URLなど）を返す仕様ならここで受け取れる
 }
@@ -125,7 +94,7 @@ export default function Signup() {
       // 画像を圧縮（なければ null が返る）
       const imageFile = await compressImage(picked);
 
-      // ① まず /users に JSON でユーザー作成（name / email / password のみ）
+      // ① /users でユーザー作成（レスポンスに token が返る想定）
       const userRes = await fetch(`${API_BASE}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -144,33 +113,25 @@ export default function Signup() {
             type: "server",
             message: "このメールアドレスは既に登録されています",
           });
-          return; // ここで終了（次に進まない）
         }
-
-        let msg = "登録に失敗しました";
-        try {
-          const data = await userRes.json();
-          // フィールド別エラー反映（例：{ fieldErrors: { name: "...", email: "...", avatar: "..." } })
-          if (data?.fieldErrors) {
-            Object.entries(data.fieldErrors).forEach(([field, message]) => {
-              setError(field, { type: "server", message: String(message) });
-            });
-          }
-          if (data?.message) msg = data.message;
-        } catch {
-          // JSON でなかった場合は握りつぶす
-        }
-        throw new Error(msg);
+        throw new Error(await pickServerMessage(userRes));
       }
 
-      // ② 画像がある場合のみ、ログイン → トークン取得 → /uploads にアップロード
+      // ② レスポンスからトークン保存
+      const created = await userRes.json();
+      const token = created.token || created.accessToken;
+      if (!token) throw new Error("認証トークンを取得できませんでした");
+      localStorage.setItem("token", token);
+      localStorage.setItem("userName", values.name);
+
+      // ③ 画像があるならJWTでアップロード
       if (imageFile) {
-        const token = await loginAndGetToken(values.email, values.password);
         await uploadIconWithJWT(imageFile, token);
       }
 
-      alert("登録が完了しました。ログインしてみてね");
-      navigate("/login", { replace: true });
+      // ④ 一覧へ
+      alert("ログインできました");
+      navigate("/books");
     } catch (err) {
       setError("root", {
         type: "server",

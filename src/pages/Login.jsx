@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE } from "../config";
 import styles from "./Login.module.css";
+import { pickServerMessage } from "../lib/util";
 
 const schema = z.object({
   email: z.string().email("メールアドレスの形式が正しくありません"),
@@ -37,27 +38,28 @@ export default function Login() {
         body: JSON.stringify(values),
       });
 
+      // 失敗時はサーバーメッセージを優先表示
       if (!res.ok) {
-        let msg = "ログインに失敗しました";
-        try {
-          const data = await res.json();
-          // サーバがフィールド別エラーを返す場合はここで反映
-          if (data?.fieldErrors) {
-            Object.entries(data.fieldErrors).forEach(([field, message]) => {
-              setError(field, { type: "server", message: String(message) });
-            });
-          }
-          if (data?.message) msg = data.message;
-        } catch {
-          //ignore parse error
-        }
+        throw new Error(await pickServerMessage(res));
+      }
+
+      // 成功時のみJSONを読む（※ res.json() は1回きり）
+      const data = await res.json();
+
+      // ★ ここでトークンを取り出す
+      const token = data.token ?? data.accessToken;
+      if (!token) {
+        // まれに 200 でもエラーメッセージが来るAPI用の保険
+        const msg =
+          data?.ErrorMessageJP ||
+          data?.message ||
+          "認証トークンを取得できませんでした";
         throw new Error(msg);
       }
 
-      // ★ ここでトークンを取り出す
-      const { token } = await res.json();
-      if (!token) throw new Error("認証トークンを取得できませんでした");
-      localStorage.setItem("token", token); // 保存
+      localStorage.setItem("token", token);
+      // もしサーバーが name を返すなら保存してヘッダー表示に反映
+      if (data?.name) localStorage.setItem("userName", data.name);
 
       alert("ログインできました");
 
@@ -65,10 +67,7 @@ export default function Login() {
       navigate("/books");
     } catch (err) {
       // 画面上部に出す共通エラー
-      setError("root", {
-        type: "server",
-        message: err.message ?? "予期せぬエラーが発生しました",
-      });
+      setError("root", { type: "server", message: err.message });
     }
   };
 

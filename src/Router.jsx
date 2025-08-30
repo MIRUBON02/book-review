@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import ReviewsListPublic from "./pages/ReviewsListPublic";
 import ReviewsListPrivate from "./pages/ReviewsListPrivate";
 import RequireAuth from "./components/RequireAuth";
+import GuestOnly from "./components/GuestOnly";
+import Profile from "./pages/Profile";
 
 export default function AppRouter() {
   return (
@@ -14,12 +16,17 @@ export default function AppRouter() {
 
       {/* 公開ページ */}
       <Route path="/public/books" element={<ReviewsListPublic />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
+
+      {/* 未ログインユーザー限定 */}
+      <Route element={<GuestOnly />}>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+      </Route>
 
       {/* ここから下はログイン必須 */}
       <Route element={<RequireAuth />}>
         <Route path="/books" element={<ReviewsListPrivate />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/public/books" replace />} />

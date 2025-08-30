@@ -1,7 +1,29 @@
 .container { max-width: 400px; margin: 48px auto; padding: 16px; }
 
+/* タイトルと戻るリンクを左右に */
+.backRow {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0 0 16px;
+}
+
+.header{
+        padding-bottom:50px ;
+}
+/* 戻るはリンク風の副ボタン（ゴースト） */
+.linkButton {
+  width: 150px;
+  font-size: 14px;
+  
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+}
 .form { display: grid;
-        grid-template-columns: 140px mixmax(0, 1fr);
+        grid-template-columns: 140px minmax(0, 1fr);
         gap: 8px 16px;
         align-items: start;
  }
@@ -23,7 +45,10 @@
         margin-top: 4px;
         min-height:1.2em;}
 
-.button { margin-top: 16px; padding: 8px 12px; }
+.updateButton{
+        grid-column: 2;
+        width: 80px;
+}
 
 .error { color: #d00; font-size: .9rem; margin-top: 4px; }
 
