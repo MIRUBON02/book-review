@@ -8,6 +8,7 @@ import ReviewsListPrivate from "./pages/ReviewsListPrivate";
 import RequireAuth from "./components/RequireAuth";
 import GuestOnly from "./components/GuestOnly";
 import Profile from "./pages/Profile";
+import NewReview from "./pages/NewReview";
 
 export default function AppRouter() {
   return (
@@ -27,6 +28,7 @@ export default function AppRouter() {
       <Route element={<RequireAuth />}>
         <Route path="/books" element={<ReviewsListPrivate />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/new" element={<NewReview />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/public/books" replace />} />

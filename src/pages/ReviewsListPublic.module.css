@@ -6,7 +6,8 @@
 
 .header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -31,7 +32,7 @@
   background: #fee2e2;   /* red-100 */
   border: 1px solid #fecaca; /* red-200 */
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .list {
@@ -91,3 +92,25 @@ ul, li {
 }
 
 .muted { color:#9ca3af; }
+
+/* 右上ツールバー */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0 16px;
+}
+
+/* 主要ボタン（青） */
+.primaryButton {
+  display: inline-block;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+.primaryButton:hover { opacity: .9; }
+.primaryButton:active { opacity: .8; }
+

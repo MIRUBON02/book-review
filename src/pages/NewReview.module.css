@@ -1,0 +1,88 @@
+.container {
+  max-width: 640px;
+  margin: 48px auto;
+  padding: 16px;
+  background: #fff;
+}
+
+/* 戻るリンク */
+.backRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.linkButton {
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+}
+
+/* 見出し */
+.header {
+  margin-bottom: 24px;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* エラー表示 */
+.error {
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+/* フォーム */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+/* ボタン */
+.buttonRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.required {
+  color: #d00;   /* 赤色 */
+  margin-left: 2px; /* 少し間隔を空けると見やすい */
+}

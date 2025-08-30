@@ -13,5 +13,57 @@
 .logo { font-weight: 700; text-decoration: none; color: #111; }
 .nav { display: flex; gap: 12px; align-items: center; }
 .user { color: #374151; font-size: 0.95rem; }
-.button { border: 1px solid #e5e7eb; background: #fff; padding: 6px 10px; border-radius: 8px; }
-.link { color: #2563eb; text-decoration: none; }
+
+.authButton {
+  display: inline-block;
+  border: 1px solid #e5e7eb; /* グレーの枠線 */
+  background: #fff;          /* 白背景 */
+  color: #111;               /* 黒文字 */
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 8px;          /* ボタン同士の余白 */
+}
+
+.authButton:hover {
+  background: #f9fafb; /* hover で薄いグレー背景 */
+}
+
+.linkButtonPrimary {
+  display: inline-block;
+  border: 1px solid #2563eb;  /* 青の枠線 */
+  background: #fff;           /* 白背景 */
+  color: #2563eb;             /* 青文字 */
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.linkButtonPrimary:hover {
+  background: #eff6ff; /* 薄い青背景で hover 感 */
+}
+
+.dangerButton {
+  display: inline-block;
+  border: 1px solid #fca5a5;   /* 薄い赤の枠線 */
+  background: #fee2e2;        /* 薄い赤背景 */
+  color: #b91c1c;             /* 濃い赤文字 */
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.dangerButton:hover {
+  background: #fecaca;        /* hover で少し濃い赤背景 */
+}
+
+

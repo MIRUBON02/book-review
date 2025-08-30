@@ -1,6 +1,6 @@
 // src/pages/Profile.jsx
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -21,11 +21,14 @@ export default function Profile() {
     handleSubmit,
     setError,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: { name: "" },
   });
+  const watchedName = useWatch({ control, name: "name" });
+  const [initialName, seiInitialName] = useState("");
 
   // 初期表示：ユーザー情報を取得してフォームに反映
   useEffect(() => {
@@ -59,7 +62,11 @@ export default function Profile() {
 
         const data = await res.json();
         // 取得値でフォームを上書き（null/undefined保険で "" を入れる）
-        reset({ name: data?.name ?? "" });
+        const serverName = (data?.name ?? data?.user?.name ?? "").trim();
+        reset({ name: serverName });
+        seiInitialName(serverName);
+        // ヘッダーと同期しておくと「ようこそ◯◯さん」ズレ防止にもなる
+        if (serverName) localStorage.setItem("userName", serverName);
       } catch (e) {
         if (e.name !== "AbortError") {
           setError("root", {
@@ -76,6 +83,7 @@ export default function Profile() {
 
   // 送信：ユーザー情報更新
   const onSubmit = async (values) => {
+    const payload = { name: (values.name ?? "").trim() };
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -90,7 +98,7 @@ export default function Profile() {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         if (res.status === 401 || res.status === 403) {
@@ -103,8 +111,8 @@ export default function Profile() {
       }
 
       // 更新成功：ヘッダー用の名前を更新して戻る
-      if (values.name) {
-        localStorage.setItem("userName", values.name);
+      if (payload.name) {
+        localStorage.setItem("userName", payload.name);
         alert("プロフィールを更新しました");
         navigate("/books");
       }
@@ -132,6 +140,7 @@ export default function Profile() {
       <header className={styles.header}>
         <h1>プロフィール編集</h1>
         <p>ユーザー名のみ編集することができます。</p>
+        <p className={styles.caution}>※同じユーザー名だと変更できません。</p>
         {errors.root?.message && (
           <p role="alert" className={styles.error}>
             {errors.root.message}
@@ -150,7 +159,7 @@ export default function Profile() {
         <button
           type="submit"
           className={styles.updateButton}
-          disabled={isSubmitting}
+          disabled={isSubmitting || (watchedName ?? "") === initialName}
         >
           {isSubmitting ? "送信中..." : "更新"}
         </button>

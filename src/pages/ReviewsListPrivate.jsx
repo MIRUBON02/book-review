@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { API_BASE } from "../config";
 import styles from "./ReviewsListPublic.module.css"; // 見た目そのまま使い回し
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -101,6 +101,11 @@ export default function ReviewsListPrivate() {
       <header className={styles.header}>
         <h1 className={styles.title}>書籍レビュー（ログイン限定）</h1>
         <p className={styles.subtitle}>10件ずつ表示</p>
+        <div className={styles.toolbar}>
+          <Link to="/new" className={styles.primaryButton}>
+            + 新規レビュー
+          </Link>
+        </div>
       </header>
 
       {items.length === 0 ? (

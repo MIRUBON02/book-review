@@ -19,7 +19,7 @@
   text-decoration: none;
   padding: 6px 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 12px;
   background: #fff;
 }
 .form { display: grid;
@@ -49,6 +49,8 @@
         grid-column: 2;
         width: 80px;
 }
+
+.caution { color: rgb(116, 116, 116); font-size: .9rem; margin-top: 4px; }
 
 .error { color: #d00; font-size: .9rem; margin-top: 4px; }
 

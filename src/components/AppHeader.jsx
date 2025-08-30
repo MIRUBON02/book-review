@@ -12,6 +12,7 @@ export default function AppHeader() {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
     navigate("/public/books", { replace: true, state: { from: location } });
+    alert("ログアウトしました");
   };
 
   return (
@@ -24,23 +25,23 @@ export default function AppHeader() {
         {token ? (
           <>
             <span className={styles.user}>ようこそ、{userName} さん</span>
-            <Link to="/profile" className={styles.button}>
+            <Link to="/profile" className={styles.linkButtonPrimary}>
               プロフィール編集
             </Link>
             <button
               type="button"
               onClick={handleLogout}
-              className={styles.button}
+              className={styles.dangerButton}
             >
               ログアウト
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" className={styles.button}>
+            <Link to="/login" className={styles.authButton}>
               ログイン
             </Link>
-            <Link to="/signup" className={styles.link}>
+            <Link to="/signup" className={styles.authButton}>
               新規登録
             </Link>
           </>

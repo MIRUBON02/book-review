@@ -38,15 +38,12 @@ export default function Login() {
         body: JSON.stringify(values),
       });
 
-      // 失敗時はサーバーメッセージを優先表示
       if (!res.ok) {
         throw new Error(await pickServerMessage(res));
       }
 
-      // 成功時のみJSONを読む（※ res.json() は1回きり）
       const data = await res.json();
 
-      // ★ ここでトークンを取り出す
       const token = data.token ?? data.accessToken;
       if (!token) {
         // まれに 200 でもエラーメッセージが来るAPI用の保険
@@ -57,16 +54,30 @@ export default function Login() {
         throw new Error(msg);
       }
 
+      // 既存の残骸を一度クリア（予防）
+      localStorage.removeItem("userName");
       localStorage.setItem("token", token);
-      // もしサーバーが name を返すなら保存してヘッダー表示に反映
-      if (data?.name) localStorage.setItem("userName", data.name);
 
+      //  第一候補: ログインAPIのレスポンスに name があれば使う
+      let name = data?.name;
+      if (!name) {
+        // 第二候補: /users で自分の情報を取得して名前を使う
+        const meRes = await fetch(`${API_BASE}/users`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (meRes.ok) {
+          const me = await meRes.json();
+          name = me?.name ?? me?.user?.name ?? "";
+        }
+      }
+      if (!name) {
+        // 第三候補: メールアドレスのローカル部を仮の名前に使う
+        name = (values.email || "").split("@")[0] || "";
+      }
+      if (name) localStorage.setItem("userName", name);
       alert("ログインできました");
-
-      // ここでログイン後のレビューにいけるようにする
       navigate("/books");
     } catch (err) {
-      // 画面上部に出す共通エラー
       setError("root", { type: "server", message: err.message });
     }
   };
