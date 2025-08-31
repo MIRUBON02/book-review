@@ -8,6 +8,7 @@ export default function NewReview() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
+  const [review, setReview] = useState("");
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -21,10 +22,15 @@ export default function NewReview() {
   }, [navigate]);
 
   // 送信可否（URLは任意なので含めない）
-  const canSubmit = useMemo(
-    () => title.trim() && detail.trim() && !submitting,
-    [title, detail, submitting]
-  );
+  const canSubmit = useMemo(() => {
+    return (
+      title.trim().length > 0 &&
+      detail.trim().length > 0 &&
+      review.trim().length > 0 &&
+      url.trim().length > 0 &&
+      !submitting
+    );
+  }, [title, detail, review, url, submitting]);
 
   // 送信処理
   const handleSubmit = useCallback(
@@ -42,11 +48,18 @@ export default function NewReview() {
           return;
         }
 
+        const t = title.trim();
+        const d = detail.trim();
+        const r = review.trim();
+        const u = url.trim();
+        const normalizedUrl = u && /^https?:\/\//i.test(u) ? u : `https://${u}`;
+
         const body = {
-          title: title.trim(),
-          url: url.trim() || undefined, // 任意なので空は送らない
-          detail: detail.trim(),
-          review: detail.trim(),
+          title: t.slice(0, 140), // 念のため上限ガード
+          detail: d.slice(0, 140), // 念のため上限ガード
+          review: r.slice(0, 140), // 念のため上限ガード
+          // https://example.com
+          url: normalizedUrl,
         };
 
         const res = await fetch(`${API_BASE}/books`, {
@@ -74,12 +87,13 @@ export default function NewReview() {
         alert("レビューを登録しました");
         navigate("/books", { replace: true });
       } catch (err) {
+        console.error("submit failed:", err); // ← ここにも出す
         setError(err.message || "登録に失敗しました");
       } finally {
         setSubmitting(false);
       }
     },
-    [title, detail, url, canSubmit, navigate]
+    [title, detail, review, url, canSubmit, navigate]
   );
 
   return (
@@ -117,7 +131,10 @@ export default function NewReview() {
         </label>
 
         <label>
-          参考URL（任意）
+          参考URL
+          <span aria-hidden="true" className={styles.required}>
+            *
+          </span>
           <input
             type="url"
             className={styles.input}
@@ -126,11 +143,12 @@ export default function NewReview() {
             placeholder="https://example.com"
             inputMode="url"
             autoComplete="url"
+            required
           />
         </label>
 
         <label>
-          レビュー本文{" "}
+          書籍情報{" "}
           <span aria-hidden="true" className={styles.required}>
             *
           </span>
@@ -142,6 +160,21 @@ export default function NewReview() {
             required
           />
         </label>
+
+        <label htmlFor="review">
+          レビュー本文{" "}
+          <span aria-hidden className={styles.required}>
+            *
+          </span>
+        </label>
+        <textarea
+          id="review"
+          rows={8}
+          className={styles.textarea}
+          value={review}
+          onChange={(e) => setReview(e.target.value)}
+          required
+        />
 
         <div className={styles.buttonRow}>
           <button

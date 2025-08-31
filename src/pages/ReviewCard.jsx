@@ -1,4 +1,4 @@
-import styles from "./ReviewsListPublic.module.css";
+import styles from "./ReviewCard.module.css";
 
 export default function ReviewCard({ review: r }) {
   return (
@@ -21,12 +21,21 @@ export default function ReviewCard({ review: r }) {
         )}
       </div>
 
-      {(r.review && r.review.trim()) || (r.detail && r.detail.trim()) ? (
-        <p className={styles.excerpt}>
-          {String(r.review ?? r.detail)
-            .trim()
-            .slice(0, 140)}
-        </p>
+      {(r.detail && r.detail.trim()) || (r.review && r.review.trim()) ? (
+        <>
+          {r.detail && r.detail.trim() && (
+            <p className={styles.detail}>
+              <span>書籍情報：</span>
+              {r.detail.trim().slice(0, 140)}
+            </p>
+          )}
+          {r.review && r.review.trim() && (
+            <p className={styles.review}>
+              <span>レビュー：</span>
+              {r.review.trim().slice(0, 140)}
+            </p>
+          )}
+        </>
       ) : (
         <p className={styles.muted}>本文はありません</p>
       )}

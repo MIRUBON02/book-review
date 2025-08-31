@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { API_BASE } from "../config";
-import styles from "./ReviewsListPublic.module.css"; // 見た目そのまま使い回し
+import styles from "./ReviewCard.module.css"; // 見た目そのまま使い回し
 import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";

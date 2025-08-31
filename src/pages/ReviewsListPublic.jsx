@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { API_BASE } from "../config";
 import { Link } from "react-router-dom";
-import styles from "./ReviewsListPublic.module.css";
+import styles from "./ReviewCard.module.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { nextPublic, prevPublic } from "../features/pagination/paginationSlice";

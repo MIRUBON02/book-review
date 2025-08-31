@@ -76,14 +76,36 @@
 .meta {
   margin-top: 6px;
   color: #6b7280;
-  font-size: 12px;
 }
 
-.excerpt {
-  margin-top: 10px;
-  color: #111827; /* gray-900 */
+.detail {
+  font-size: 14px;
+  margin: 10px 0 0;
+  color: #6b7280;
   line-height: 1.7;
+  white-space: nowrap;   /* 改行禁止で一行に並べる */
+  overflow: hidden;   /* 要素を超えた部分は非表示 */
+  text-overflow: ellipsis;   /* 長すぎる部分は...にする */
+
+  /* ★ 連続文字でも途中で折り返してから省略できるようにする */
+  overflow-wrap: anywhere;   /* 推奨 */
+  word-break: break-word;    /* フォールバック */
 }
+
+.review {
+  font-size: 14px;
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+
+  overflow-wrap: anywhere;   /* 「単語の途中でもいいから、要素の幅からはみ出すなら好きなところで折り返す */
+  word-break: break-word;   /* 単語の途中でも強制的に折り返していい。サポートが古い環境向けの保険 */
+}
+
 
 ul, li {
   list-style: none;   /* デフォルトの「・」を消す */
