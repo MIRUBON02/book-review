@@ -1,0 +1,99 @@
+.container {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px;
+  background: #fff;
+}
+
+.backRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.linkButton {
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+}
+
+.header {
+  margin-bottom: 8px;
+}
+.header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.loading {
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.error {
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.article {
+  margin-top: 12px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+  line-height: 1.8;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* 1行ごとのラベル行 */
+.row {
+  margin: 12px 0 0;
+}
+
+/* ラベルは短く固定幅にしない。テキストが長くても自然に折返し */
+.label {
+  color: #6b7280;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+/* 本文側：改行維持＆長い単語/URLも強制的に折返す */
+.value {
+  white-space: pre-wrap;   /* 改行文字をそのまま表示 */
+  overflow-wrap: anywhere; /* 連続文字も枠内に収める */
+  word-break: break-word;  /* 古いブラウザの保険 */
+}
+
+/* タイトルやメタにも同じ“はみ出さない”性質を付与しておく */
+.title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.meta {
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.body {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.muted {
+  color: #9ca3af;
+}

@@ -9,11 +9,16 @@ import RequireAuth from "./components/RequireAuth";
 import GuestOnly from "./components/GuestOnly";
 import Profile from "./pages/Profile";
 import NewReview from "./pages/NewReview";
+import ReviewDetail from "./pages/ReviewDetail";
+import EditReview from "./pages/EditReview";
 
 export default function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/public/books" replace />} />
+
+      {/* ★ レビュー詳細ページ：誰でも見られるのでトップ階層に配置 */}
+      <Route path="/detail/:id" element={<ReviewDetail />} />
 
       {/* 公開ページ */}
       <Route path="/public/books" element={<ReviewsListPublic />} />
@@ -29,6 +34,7 @@ export default function AppRouter() {
         <Route path="/books" element={<ReviewsListPrivate />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/new" element={<NewReview />} />
+        <Route path="/edit/:id" element={<EditReview />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/public/books" replace />} />

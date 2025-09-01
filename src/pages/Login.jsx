@@ -44,7 +44,7 @@ export default function Login() {
 
       const data = await res.json();
 
-      const token = data.token ?? data.accessToken;
+      const token = data.token;
       if (!token) {
         // まれに 200 でもエラーメッセージが来るAPI用の保険
         const msg =
@@ -84,6 +84,15 @@ export default function Login() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.backRow}>
+        <Link
+          to="public/books"
+          className={styles.linkButton}
+          aria-label="一覧へ戻る"
+        >
+          ← 一覧へ戻る
+        </Link>
+      </div>
       <h1>ログイン</h1>
 
       {/* グローバルエラー */}

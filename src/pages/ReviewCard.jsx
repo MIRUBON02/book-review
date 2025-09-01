@@ -1,10 +1,34 @@
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./ReviewCard.module.css";
 
 export default function ReviewCard({ review: r }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const id = r?.id ?? r?.reviewId;
+
+  const handleCardClick = () => {
+    if (id == null) return;
+    navigate(`/detail/${id}`, { state: { preview: r } });
+  };
+
   return (
-    <li className={styles.card}>
+    <li className={styles.card} onClick={handleCardClick}>
       <div className={styles.cardHeader}>
         <h2 className={styles.bookTitle}>{r.title ?? "(無題)"}</h2>
+
+        {/* /books の一覧アイテムには isMine が返るので、自分の投稿だけ編集表示 */}
+        {r.isMine && id != null && (
+          <Link
+            to={`/edit/${id}`}
+            // これで「ログイン一覧（/books）」から来た事実が state.returnTo === "/books" に残る
+            state={{ returnTo: location.pathname }}
+            className={styles.editLink}
+            aria-label="このレビューを編集"
+            onClick={(e) => e.stopPropagation()} // カード遷移の抑止
+          >
+            編集
+          </Link>
+        )}
       </div>
 
       <div className={styles.meta}>

@@ -21,7 +21,7 @@ export default function NewReview() {
     }
   }, [navigate]);
 
-  // 送信可否（URLは任意なので含めない）
+  // 送信可否(全部の要素入力済か判定)
   const canSubmit = useMemo(() => {
     return (
       title.trim().length > 0 &&

@@ -52,14 +52,19 @@
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;        /* ← baseline だと高さが揃わず崩れやすいので center に */
   gap: 8px;
 }
 
 .bookTitle {
+  flex: 1 1 auto;             /* ← ここで横幅を担当させる */
+   min-width: 0;               /* ← 省略記号を効かせるために必須 */
   font-size: 16px;
   font-weight: 700;
   line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;           /* はみ出した部分を隠す */
+  text-overflow: ellipsis;    /* はみ出した部分を「...」にする */
 }
 
 .rating {
@@ -114,6 +119,21 @@ ul, li {
 }
 
 .muted { color:#9ca3af; }
+
+/* 右上の「編集」ボタン */
+.editLink {
+   flex: 0 0 auto;             /* ← これでボタンが潰れない */
+  display: inline-flex;       /* ← 高さが安定。中身を横並び1行に */
+  align-items: center;
+  white-space: nowrap;        /* ← 「編\n集」と縦に割れない */
+  font-size: 14px;
+  color: #2563eb;
+  text-decoration: none;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  padding: 2px 8px;
+}
+.editLink:hover { background: #eff6ff; }
 
 /* 右上ツールバー */
 .toolbar {

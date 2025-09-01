@@ -5,15 +5,20 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  width: 100%;
   margin: 0 0 16px;
 }
+
+
 
 .header{
         padding-bottom:50px ;
 }
 /* 戻るはリンク風の副ボタン（ゴースト） */
 .linkButton {
-  width: 150px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14px;
   
   text-decoration: none;
@@ -21,6 +26,8 @@
   border: 1px solid #ccc;
   border-radius: 12px;
   background: #fff;
+  display: inline-flex;
+
 }
 .form { display: grid;
         grid-template-columns: 140px minmax(0, 1fr);
@@ -56,8 +63,8 @@
 
 .register{margin-top:16px}
 
-.image {width: 96;
-        height: 96;
-        border-radius: "50%";
+.image {width: 150px;
+        height: 150px;
+        border-radius: 12px;
         object-fit: "cover";
          margin-top: 8; }

@@ -146,6 +146,15 @@ export default function Signup() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.backRow}>
+        <Link
+          to="public/books"
+          className={styles.linkButton}
+          aria-label="一覧へ戻る"
+        >
+          ← 一覧へ戻る
+        </Link>
+      </div>
       <h1>新規登録</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}

@@ -60,6 +60,16 @@ export default function ReviewsListPublic() {
     return () => ac.abort();
   }, [offset]);
 
+  const handleNewReviewClick = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("新規レビューを投稿するには、ログインが必要です");
+      return;
+    }
+    // ログイン済みなら /new へ
+    window.location.href = "/new";
+  };
+
   if (loading) {
     return (
       <section className={styles.wrapper} aria-busy>
@@ -84,6 +94,15 @@ export default function ReviewsListPublic() {
       <header className={styles.header}>
         <h1 className={styles.title}>書籍レビュー（公開）</h1>
         <p className={styles.subtitle}>10件ずつ表示</p>
+        <div className={styles.toolbar}>
+          <Link
+            to="/new"
+            className={styles.primaryButton}
+            onClick={handleNewReviewClick}
+          >
+            + 新規レビュー
+          </Link>
+        </div>
       </header>
 
       <p className={styles.register}>
